@@ -17,7 +17,7 @@ function addNews($subj,$message,$un)
 	else
 	{
 		$post_time = time();
-		$sql =  "INSERT INTO mw_news(title, message, posted_by, post_time) VALUES('".$subj."','".$message."','".$un."','".$post_time."')";
+		$sql =  "INSERT INTO mw_news(title, message, posted_by, post_time) VALUES('".mysqli_real_escape_string($DB->getConn(), $subj)."','".mysqli_real_escape_string($DB->getConn(), $message)."','".mysqli_real_escape_string($DB->getConn(), $un)."','".$post_time."')";
         $tabs = $DB->query($sql);
 		$Core->clearCache();
 		output_message('success', $lang['news_add_success']);
