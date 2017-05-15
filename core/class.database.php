@@ -193,5 +193,9 @@ class Database
 		}
 		return TRUE;
 	}
+
+    public function getConn() {
+        return $this->mysql;
+    }
 }
 ?>
