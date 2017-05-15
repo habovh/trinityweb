@@ -101,7 +101,7 @@ class Character
 	public function getAccountId($guid)
     {
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->selectRow("SELECT `account` FROM `characters` WHERE `guid` = '$guid' LIMIT 1");
 		if($row == FALSE)
 		{
@@ -119,7 +119,7 @@ class Character
 	public function getLevel($guid) 
 	{
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->selectRow("SELECT `level` FROM `characters` WHERE `guid` = '$guid' LIMIT 1");
 		if($row == FALSE)
 		{
@@ -137,7 +137,7 @@ class Character
 	public function getClass($guid) 
 	{
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->selectRow("SELECT `class` FROM `characters` WHERE `guid` = '$guid' LIMIT 1");
 		if($row == FALSE)
 		{
@@ -155,7 +155,7 @@ class Character
 	public function getRace($guid) 
 	{
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->selectRow("SELECT `race` FROM `characters` WHERE `guid` = '$guid' LIMIT 1");
 		if($row == FALSE)
 		{
@@ -173,7 +173,7 @@ class Character
 	public function getGender($guid) 
 	{
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->selectRow("SELECT `gender` FROM `characters` WHERE `guid` = '$guid' LIMIT 1");
 		if($row == FALSE)
 		{
@@ -191,7 +191,7 @@ class Character
 	public function getFaction($guid)
     {
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $ally = array("1", "3", "4", "7", "11");
         $row = $this->getRace($guid);
 		if($row == FALSE)
@@ -217,7 +217,7 @@ class Character
 	public function getMoney($guid) 
 	{
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->selectRow("SELECT `money` FROM `characters` WHERE `guid` = '$guid' LIMIT 1");
 		if($row == FALSE)
 		{
@@ -235,7 +235,7 @@ class Character
 	function getName($guid)
 	{
 		global $CDB;
-		$guid = mysql_real_escape_string($guid);
+		$guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->selectCell("SELECT `name` FROM `characters` WHERE `guid` = '$guid' LIMIT 1");
 		if($row == FALSE)
 		{
@@ -353,7 +353,7 @@ class Character
 	public function isOnline($guid)
     {
 		global $CDB;
-		$guid = mysql_real_escape_string($guid);
+		$guid = mysqli_real_escape_string($CDB->getConn(), $guid);
         $row = $CDB->count("SELECT COUNT(*) AS `count` FROM `characters` WHERE `guid` = '$guid' AND `online` = '1'");
         if($row['count'] > 0) 
 		{
@@ -630,8 +630,8 @@ class Character
 	public function setName($guid, $newname)
 	{
 		global $CDB;
-		$guid = mysql_real_escape_string($guid);
-		$newname = mysql_real_escape_string(strtolower($newname));
+		$guid = mysqli_real_escape_string($CDB->getConn(), $guid);
+		$newname = mysqli_real_escape_string($CDB->getConn(), strtolower($newname));
         $newname = ucfirst($newname);
 		$send = $CDB->query("UPDATE `characters` SET `name`='$newname' WHERE `guid`='$guid'");
 		return TRUE;
@@ -643,8 +643,8 @@ class Character
 	public function setAccountId($guid, $accountId)
     {
 		global $CDB;
-        $guid = mysql_real_escape_string($guid);
-        $acct = mysql_real_escape_string($accountId);
+        $guid = mysqli_real_escape_string($CDB->getConn(), $guid);
+        $acct = mysqli_real_escape_string($CDB->getConn(), $accountId);
         $CDB->query("UPDATE `characters` SET `account` = '$acct' WHERE `guid` = '$guid' LIMIT 1");
         return true;
     }

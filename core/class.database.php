@@ -26,8 +26,8 @@ class Database
 
     public function __construct($db_host, $db_port, $db_user, $db_pass, $db_name)
     {
-        $this->mysql = @mysql_connect($db_host.":".$db_port, $db_user, $db_pass, true);
-        $this->selected_database = @mysql_select_db($db_name, $this->mysql);
+        $this->mysql = @mysqli_connect($db_host.":".$db_port, $db_user, $db_pass);
+        $this->selected_database = @mysqli_select_db($this->mysql, $db_name);
 		return TRUE;
     }
 
@@ -36,7 +36,7 @@ class Database
 
     public function __destruct()
     {
-        @mysql_close($this->mysql) or die(mysql_error());
+        @mysqli_close($this->mysql) or die(mysqli_error($this->mysql));
     }
 	
 /************************************************************
@@ -63,7 +63,7 @@ class Database
 
     public function query($query)
     {
-        $sql = mysql_query($query,$this->mysql) or die("Couldnt Run Query: ".$query."<br />Error: ".mysql_error($this->mysql)."");
+        $sql = mysqli_query($this->mysql, $query) or die("Couldnt Run Query: ".$query."<br />Error: ".mysqli_error($this->mysql)."");
 		$this->_statistics['count']++;
 		return TRUE;
     }
@@ -73,16 +73,16 @@ class Database
 
     public function select($query)
     {
-        $sql = mysql_query($query,$this->mysql) or die("Couldnt Run Query: ".$query."<br />Error: ".mysql_error($this->mysql)."");
+        $sql = mysqli_query($this->mysql, $query) or die("Couldnt Run Query: ".$query."<br />Error: ".mysqli_error($this->mysql)."");
 		$this->_statistics['count']++;
 		$i = 1;
-		if(mysql_num_rows($sql) == 0)
+		if(mysqli_num_rows($sql) == 0)
 		{
 			$result = FALSE;
 		}
 		else
 		{
-			while($row = mysql_fetch_assoc($sql))
+			while($row = mysqli_fetch_assoc($sql))
 			{
 				foreach($row as $colname => $value)
 				{
@@ -100,15 +100,15 @@ class Database
 
 	public function selectRow($query)
     {
-        $sql = mysql_query($query,$this->mysql) or die("Couldnt Run Query: ".$query."<br />Error: ".mysql_error($this->mysql)."");
+        $sql = mysqli_query($this->mysql, $query) or die("Couldnt Run Query: ".$query."<br />Error: ".mysqli_error($this->mysql)."");
 		$this->_statistics['count']++;
-		if(mysql_num_rows($sql) == 0)
+		if(mysqli_num_rows($sql) == 0)
 		{
 			return FALSE;
 		}
 		else
 		{
-			$row = mysql_fetch_array($sql);
+			$row = mysqli_fetch_array($sql);
 			return $row;
 		}
     }
@@ -118,15 +118,15 @@ class Database
 
 	public function selectCell($query)
     {
-        $sql = mysql_query($query,$this->mysql) or die("Couldnt Run Query: ".$query."<br />Error: ".mysql_error($this->mysql)."");
+        $sql = mysqli_query($this->mysql, $query) or die("Couldnt Run Query: ".$query."<br />Error: ".mysqli_error($this->mysql)."");
 		$this->_statistics['count']++;
-		if(mysql_num_rows($sql) == 0)
+		if(mysqli_num_rows($sql) == 0)
 		{
 			return FALSE;
 		}
 		else
 		{
-			$row = mysql_fetch_array($sql);
+			$row = mysqli_fetch_array($sql);
 			return $row['0'];
 		}
     }
@@ -137,9 +137,9 @@ class Database
 
 	public function count($query)
     {
-        $sql = mysql_query($query, $this->mysql) or die("Couldnt Run Query: ".$query."<br />Error: ".mysql_error($this->mysql)."");
+        $sql = mysqli_query($this->mysql, $query) or die("Couldnt Run Query: ".$query."<br />Error: ".mysqli_error($this->mysql)."");
 		$this->_statistics['count']++;
-		return mysql_result($sql, 0);
+		return mysqli_fetch_row($sql)[0];
     }
 
 //	************************************************************	
@@ -188,7 +188,7 @@ class Database
 		{
 			if($query)
 			{
-				mysql_query($query, $this->mysql) or die("Couldnt Run Query: ".$query."<br />Error: ".mysql_error($this->mysql)."");
+				mysqli_query($this->mysql, $query) or die("Couldnt Run Query: ".$query."<br />Error: ".mysqli_error($this->mysql)."");
 			}
 		}
 		return TRUE;

@@ -132,7 +132,7 @@
 				<div class="main-content">		
 					<p>
 						<?php echo $lang['php_ver']; ?>: <?php echo phpversion(); ?><br />
-						<?php echo $lang['mysql_ver']; ?>: <?php echo mysql_get_server_info(); ?><br /><br />
+						<?php echo $lang['mysql_ver']; ?>: <?php echo mysqli_get_server_info($DB->getConn()); ?><br /><br />
 						<?php echo $lang['allow_url_open']; ?>: <?php echo $allowfopen; ?><br />
 						<?php echo $lang['allow_fsockopen']; ?>: <?php echo $fsock; ?><br />
 					</p>						
